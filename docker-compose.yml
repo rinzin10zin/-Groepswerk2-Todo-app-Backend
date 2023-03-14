@@ -1,9 +1,9 @@
-version: '3'
+version: "3"
 services:
   #PHP
   php:
     build:
-      context: './docker/php/'
+      context: "./docker/php/"
       args:
         PHP_VERSION: ${PHP_VERSION:-7.3}
     restart: unless-stopped
@@ -21,11 +21,11 @@ services:
   #Apache
   apache:
     build:
-      context: './docker/apache/'
+      context: "./docker/apache/"
       args:
         APACHE_VERSION: ${APACHE_VERSION:-4.2}
     environment:
-        APACHE_ROOT_FOLDER: ${APACHE_ROOT_FOLDER}
+      APACHE_ROOT_FOLDER: ${APACHE_ROOT_FOLDER}
     restart: unless-stopped
     tty: true
     depends_on:
@@ -41,9 +41,9 @@ services:
   #MySQL
   db:
     build:
-      context: './docker/mysql/'
+      context: "./docker/mysql/"
       args:
-          MYSQL_VERSION: ${MYSQL_VERSION:-5.7}
+        MYSQL_VERSION: ${MYSQL_VERSION:-5.7}
     restart: unless-stopped
     tty: true
     ports:
@@ -70,7 +70,7 @@ services:
     ports:
       - "8080:80"
     environment:
-      MYSQL_USERNAME: root
+      MYSQL_USERNAME: ID396978_phpFuncProgram
       MYSQL_PASSWORD: ${DB_ROOT_PASSWORD:-supersecret}
     networks:
       - app-network
