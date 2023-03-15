@@ -28,10 +28,10 @@ class Db
         }
     }
 
-    public function executeQuery($sql, $filters = [], $fetch = PDO::FETCH_OBJ)
+    public function executeGetQuery($sql, $fetch = PDO::FETCH_OBJ)
     {
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($filters);
+        $stmt->execute();
         return $stmt->fetchAll($fetch);
     }
 }
