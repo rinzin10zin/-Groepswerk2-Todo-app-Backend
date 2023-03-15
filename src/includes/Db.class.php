@@ -43,4 +43,10 @@ class Db
         $stmt->execute($filters);
         return $stmt->fetch($fetch);
     }
+    public function executeQuery($sql, $filters = [], $fetch = PDO::FETCH_OBJ)
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($filters);
+        // return $stmt->fetch($fetch);
+    }
 }

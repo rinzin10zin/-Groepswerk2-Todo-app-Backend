@@ -21,25 +21,28 @@ $response->args = $args; //Easy for developing, so you can see the query in the 
 $db = new Db();
 $Lists = new Lists($db);
 
-if ($args == []) {
-    $response->data = $Lists->getAll();
-    header('Content-Type: application/json; charset=utf-8');
-    print json_encode($response);
-    exit;
-}
+if ($method == "GET") {
+    if ($args == []) {
+        $response->data = $Lists->getAll();
+        header('Content-Type: application/json; charset=utf-8');
+        print json_encode($response);
+        exit;
+    }
 
 
-if ($args["resource"] == "lists") {
-    $response->data = $Lists->getAllLists();
-    header('Content-Type: application/json; charset=utf-8');
-    print json_encode($response);
-    exit;
-}
-if ($args["resource"] == "list" && is_numeric($args["id"])) {
-    $response->data = $Lists->getListById($args["id"]);
-    header('Content-Type: application/json; charset=utf-8');
-    print json_encode($response);
-    exit;
+    if ($args["resource"] == "lists") {
+        $response->data = $Lists->getAllLists();
+        header('Content-Type: application/json; charset=utf-8');
+        print json_encode($response);
+        exit;
+    }
+    if ($args["resource"] == "list" && is_numeric($args["id"])) {
+        $response->data = $Lists->getListById($args["id"]);
+        header('Content-Type: application/json; charset=utf-8');
+        print json_encode($response);
+        exit;
+    }
+} else if ($method == "POST") {
 }
 
 header('Content-Type: application/json; charset=utf-8');

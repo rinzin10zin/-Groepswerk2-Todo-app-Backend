@@ -6,9 +6,10 @@ require "./includes/Lists.class.php";
 $db = new Db();
 $lists = new Lists($db);
 
-$listss = $lists->getListById(1);
+$list = $lists->addList("list-test", 2, NULL, 0, "black", NULL);
+$lists = $lists->getAllLists();
 
 
 echo "<pre>";
-var_dump($listss);
+var_dump($lists);
 exit;
