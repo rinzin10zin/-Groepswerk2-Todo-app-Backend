@@ -1,11 +1,14 @@
 <?php
 
 require "./includes/Db.class.php";
+require "./includes/Lists.class.php";
 
 $db = new Db();
+$lists = new Lists($db);
 
-$data = $db->executeGetQuery("SELECT * FROM list");
+$listss = $lists->getListById(1);
+
 
 echo "<pre>";
-var_dump($data);
+var_dump($listss);
 exit;

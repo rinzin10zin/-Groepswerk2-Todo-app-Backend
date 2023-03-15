@@ -12,6 +12,11 @@ $method = $_SERVER["REQUEST_METHOD"]; //Gets the method from the requests; eg. G
 $response = new StdClass;
 $response->args = $args; //Easy for developing, so you can see the query in the response
 
+// echo "<pre>";
+// echo "lol";
+// var_dump($response);
+// exit;
+
 //Open Database connection
 $db = new Db();
 $Lists = new Lists($db);
@@ -26,6 +31,12 @@ if ($args == []) {
 
 if ($args["resource"] == "lists") {
     $response->data = $Lists->getAllLists();
+    header('Content-Type: application/json; charset=utf-8');
+    print json_encode($response);
+    exit;
+}
+if ($args["resource"] == "list" && is_numeric($args["id"])) {
+    $response->data = $Lists->getListById($args["id"]);
     header('Content-Type: application/json; charset=utf-8');
     print json_encode($response);
     exit;
