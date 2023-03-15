@@ -37,7 +37,7 @@ class Lists
         $sql = "INSERT INTO `list` (`id`, `name`, `createdAt`, `type_id`, `category_id`, `important`, `color`, `photo`) VALUES (NULL, :name, CURRENT_TIMESTAMP, :type_id, :category_id, :important, :color, :photo);";
         return $this->db->executeGetOneQuery($sql, ["name" => $name, "type_id" => $type_id, "category_id" => $category_id, "important" => $important, "color" => $color, "photo" => $photo]);
     }
-    public function addTodo($name, $checked, $list_id)
+    public function addTodo($name, $list_id, $checked = "0")
     {
         $sql = "INSERT INTO `list-item` (`id`, `name`, `checked`, `list_id`) VALUES (NULL, :name, :checked, :list_id);";
         return $this->db->executeGetOneQuery($sql, ["name" => $name, "checked" => $checked, "list_id" => $list_id]);
