@@ -23,7 +23,7 @@ services:
     build:
       context: "./docker/apache/"
       args:
-        APACHE_VERSION: ${APACHE_VERSION:-4.2}
+        APACHE_VERSION: ${APACHE_VERSION:-2.4}
     environment:
       APACHE_ROOT_FOLDER: ${APACHE_ROOT_FOLDER}
     restart: unless-stopped
