@@ -32,10 +32,10 @@ class Lists
         ";
         return $this->db->executeOneQuery($sql, ["id" => $id]);
     }
-    public function addList($data)
+    public function addList($body)
     {
         // needed data: $name, $type_id, $category_id, $important, $color, $photo
-        $keys = array_keys($data);
+        $keys = array_keys($body);
         $cols = implode(', ', $keys);
 
 
@@ -44,8 +44,7 @@ class Lists
         }, $keys);
         $values = implode(', ', $values);
         $sql = "INSERT INTO `list` ($cols) VALUES ($values);";
-        var_dump($sql);
-        return $this->db->executeOneQuery($sql, $data);
+        return $this->db->executeOneQuery($sql, $body);
     }
     public function getTodo($id)
     {
@@ -68,10 +67,10 @@ class Lists
         $sql = "UPDATE `list_item` SET `checked` = '0' WHERE `list_item`.`id` = :id";
         return $this->db->executeOneQuery($sql, ["id" => $id]);
     }
-    public function addTodo($data)
+    public function addTodo($body)
     {
         // needed data:  `name`, `checked`, `list_id`
-        $keys = array_keys($data);
+        $keys = array_keys($body);
         $cols = implode(', ', $keys);
 
 
@@ -80,7 +79,7 @@ class Lists
         }, $keys);
         $values = implode(', ', $values);
         $sql = "INSERT INTO `list_item` ($cols) VALUES ($values);";
-        return $this->db->executeOneQuery($sql, $data);
+        return $this->db->executeOneQuery($sql, $body);
     }
     public function deleteList($id)
     {

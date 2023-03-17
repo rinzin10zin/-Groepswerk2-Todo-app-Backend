@@ -63,6 +63,8 @@ switch ($args["resource"]) {
             case 'POST':
                 // makeBody(["name", "type_id", "category_id"], ["important", "color", "photo"]);
                 if (!isset($args["id"])) {
+                    // var_dump($_POST);
+                    // exit;
                     // needed data: $name, $type_id, $category_id, $important, $color, $photo
                     // $data = ["name" => "list1-test", "type_id" => "2", "category_id" => NULL, "important" => "0", "color" => "pink", "photo" => NULL];
                     $response->data = $lists->addList($_POST);
@@ -104,6 +106,23 @@ switch ($args["resource"]) {
         }
         break;
 
+    case 'check':
+        if ($method === "PATCH" && isset($args["id"]) && is_numeric($args["id"])) {
+            $lists->checkTodo($args["id"]);
+            header('Content-Type: application/json; charset=utf-8');
+            print json_encode(["status" => "success", "message" => "Id: " . $args["id"] . " is succesfully checked"]);
+            exit;
+        }
+        break;
+    case 'uncheck':
+        if ($method === "PATCH" && isset($args["id"]) && is_numeric($args["id"])) {
+            $lists->uncheckTodo($args["id"]);
+            header('Content-Type: application/json; charset=utf-8');
+            print json_encode(["status" => "success", "message" => "Id: " . $args["id"] . " is succesfully unchecked"]);
+            exit;
+        }
+        break;
+
     case 'todo':
         switch ($method) {
             case 'POST':
@@ -116,26 +135,6 @@ switch ($args["resource"]) {
                     exit;
                 }
                 break;
-            case 'PATCH':
-                // todo/id => checks
-                if (isset($args["id"]) && is_numeric($args["id"])) {
-                    $lists->checkTodo($args["id"]);
-                    header('Content-Type: application/json; charset=utf-8');
-                    print json_encode(["status" => "success", "message" => "Id: " . $args["id"] . " is succesfully checked"]);
-                    exit;
-                }
-                break;
-                // case 'PATCH':
-                //     // todo/id => checks and unchecks
-                //     if (isset($args["id"]) && is_numeric($args["id"])) {
-                //         $isChecked = $lists->todoIsChecked($args["id"]);
-                //         $isChecked ? $lists->uncheckTodo($args["id"]) : $lists->checkTodo($args["id"]);
-                //         $msg = $isChecked ? "unchecked" : "checked";
-                //         header('Content-Type: application/json; charset=utf-8');
-                //         print json_encode(["status" => "success", "message" => "Id: " . $args["id"] . " is succesfully " . $msg]);
-                //         exit;
-                //     }
-                //     break;
             case 'DELETE':
                 // todo/id => checks and unchecks
                 if (isset($args["id"]) && is_numeric($args["id"])) {
