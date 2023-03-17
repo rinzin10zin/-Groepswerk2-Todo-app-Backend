@@ -8,4 +8,5 @@ RewriteRule ^api/([^/]+)/(\d+)$ api.php?resource=$1&id=$2 [L,QSA]
 RewriteRule ^api$ api.php [L,QSA]
 
 # Rewrite /api/lists to /api.php?resource=lists
-RewriteRule ^api/lists$ api.php?resource=lists [L,QSA]
+RewriteRule ^api/(.+)$ api.php?resource=$1 [L,QSA]
+
