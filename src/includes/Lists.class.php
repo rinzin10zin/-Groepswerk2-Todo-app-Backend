@@ -79,7 +79,7 @@ class Lists
             return ':' . $key;
         }, $keys);
         $values = implode(', ', $values);
-        $sql = "INSERT INTO `list-item` ($cols) VALUES ($values);";
+        $sql = "INSERT INTO `list_item` ($cols) VALUES ($values);";
         return $this->db->executeOneQuery($sql, $data);
     }
     public function deleteList($id)
@@ -89,7 +89,7 @@ class Lists
     }
     public function deleteTodo($id)
     {
-        $sql = "DELETE FROM `list-item` WHERE `list-item`.`id` = :id";
+        $sql = "DELETE FROM `list_item` WHERE `list_item`.`id` = :id";
         return $this->db->executeOneQuery($sql, ["id" => $id]);
     }
     public function getAllTodoByList($id)
