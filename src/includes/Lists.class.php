@@ -11,7 +11,7 @@ class Lists
     public function getAll($limit = 500)
     {
         $sql = "SELECT * FROM list";
-        return $this->db->executeGetQuery($sql);
+        return $this->db->executeQuery($sql);
     }
     public function getAllLists($limit = 500)
     {
@@ -20,7 +20,7 @@ class Lists
         LEFT JOIN category ON list.category_id = category.id
         LEFT JOIN type ON list.type_id = type.id;
         ";
-        return $this->db->executeGetQuery($sql);
+        return $this->db->executeQuery($sql);
     }
     public function getListById($id)
     {
@@ -30,16 +30,71 @@ class Lists
         LEFT JOIN type ON list.type_id = type.id
         WHERE list.id = :id;
         ";
-        return $this->db->executeGetOneQuery($sql, ["id" => $id]);
+        return $this->db->executeOneQuery($sql, ["id" => $id]);
     }
-    public function addList($name, $type_id, $category_id, $important, $color, $photo)
+    public function addList($data)
     {
-        $sql = "INSERT INTO `list` (`id`, `name`, `createdAt`, `type_id`, `category_id`, `important`, `color`, `photo`) VALUES (NULL, :name, CURRENT_TIMESTAMP, :type_id, :category_id, :important, :color, :photo);";
-        return $this->db->executeGetOneQuery($sql, ["name" => $name, "type_id" => $type_id, "category_id" => $category_id, "important" => $important, "color" => $color, "photo" => $photo]);
+        // needed data: $name, $type_id, $category_id, $important, $color, $photo
+        $keys = array_keys($data);
+        $cols = implode(', ', $keys);
+
+
+        $values = array_map(function ($key) {
+            return ':' . $key;
+        }, $keys);
+        $values = implode(', ', $values);
+        $sql = "INSERT INTO `list` ($cols) VALUES ($values);";
+        var_dump($sql);
+        return $this->db->executeOneQuery($sql, $data);
     }
-    public function addTodo($name, $list_id, $checked = "0")
+    public function getTodo($id)
     {
-        $sql = "INSERT INTO `list-item` (`id`, `name`, `checked`, `list_id`) VALUES (NULL, :name, :checked, :list_id);";
-        return $this->db->executeGetOneQuery($sql, ["name" => $name, "checked" => $checked, "list_id" => $list_id]);
+        $sql = "SELECT * FROM `list_item` WHERE `id` = :id";
+        return $this->db->executeOneQuery($sql, ["id" => $id]);
+    }
+    public function todoIsChecked($id)
+    {
+        $sql = "SELECT * FROM `list_item` WHERE `list_id` = :id";
+        $response = $this->db->executeOneQuery($sql, ["id" => $id]);
+        return $response ? true : false;
+    }
+    public function checkTodo($id)
+    {
+        $sql = "UPDATE `list_item` SET `checked` = '1' WHERE `list_item`.`id` = :id";
+        return $this->db->executeOneQuery($sql, ["id" => $id]);
+    }
+    public function uncheckTodo($id)
+    {
+        $sql = "UPDATE `list_item` SET `checked` = '0' WHERE `list_item`.`id` = :id";
+        return $this->db->executeOneQuery($sql, ["id" => $id]);
+    }
+    public function addTodo($data)
+    {
+        // needed data:  `name`, `checked`, `list_id`
+        $keys = array_keys($data);
+        $cols = implode(', ', $keys);
+
+
+        $values = array_map(function ($key) {
+            return ':' . $key;
+        }, $keys);
+        $values = implode(', ', $values);
+        $sql = "INSERT INTO `list-item` ($cols) VALUES ($values);";
+        return $this->db->executeOneQuery($sql, $data);
+    }
+    public function deleteList($id)
+    {
+        $sql = "DELETE FROM `list` WHERE `list`.`id` = :id";
+        return $this->db->executeOneQuery($sql, ["id" => $id]);
+    }
+    public function deleteTodo($id)
+    {
+        $sql = "DELETE FROM `list-item` WHERE `list-item`.`id` = :id";
+        return $this->db->executeOneQuery($sql, ["id" => $id]);
+    }
+    public function getAllTodoByList($id)
+    {
+        $sql = "SELECT * FROM `list_item` WHERE `list_id` = :id";
+        return $this->db->executeQuery($sql, ["id" => $id]);
     }
 }

@@ -31,22 +31,16 @@ class Db
         }
     }
 
-    public function executeGetQuery($sql, $filters = [], $fetch = PDO::FETCH_OBJ)
+    public function executeQuery($sql, $filters = [], $fetch = PDO::FETCH_OBJ)
     {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($filters);
         return $stmt->fetchAll($fetch);
     }
-    public function executeGetOneQuery($sql, $filters = [], $fetch = PDO::FETCH_OBJ)
+    public function executeOneQuery($sql, $filters = [], $fetch = PDO::FETCH_OBJ)
     {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($filters);
         return $stmt->fetch($fetch);
-    }
-    public function executeQuery($sql, $filters = [], $fetch = PDO::FETCH_OBJ)
-    {
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($filters);
-        // return $stmt->fetch($fetch);
     }
 }

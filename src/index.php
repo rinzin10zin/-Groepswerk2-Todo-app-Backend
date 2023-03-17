@@ -6,7 +6,8 @@ require "./includes/Lists.class.php";
 $db = new Db();
 $lists = new Lists($db);
 
-$list = $lists->addTodo("todo1", 8);
+// $list = $lists->deleteTodo(5);
+// $list = $lists->deleteList(10);
 $lists = $lists->getAllLists();
 
 
