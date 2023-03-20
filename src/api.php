@@ -46,9 +46,11 @@ switch ($args["resource"]) {
                 // makeBody(["name", "type_id", "category_id"], ["important", "color", "photo"]);
                 if (!isset($args["id"])) {
                     // needed data: $name, $type_id, $category_id, $important, $color, $photo
-                    // $data = ["name" => "list1-test", "type_id" => "2", "category_id" => NULL, "important" => "0", "color" => "pink", "photo" => NULL];
-                    $response->data = $lists->addList($_POST);
-                    $response->status = "success";
+                    // $data = ["name" => "CNTest", "type_id" => "2", "category_id" => NULL, "important" => "0", "color" => "pink", "photo" => NULL];
+                    $response->executed = $lists->addList($_POST);
+
+                    $response->status = $response->executed ?  "success" : "failed";
+
                     header('Content-Type: application/json; charset=utf-8');
                     print json_encode($response);
                     exit;
@@ -135,6 +137,15 @@ switch ($args["resource"]) {
                 break;
         }
         break;
+
+    case "categories":
+        switch ($method) {
+            case "GET":
+                $response->data = $lists->getAllCategoryNames();
+                header('Content-Type: application/json; charset=utf-8');
+                print json_encode($response);
+                exit;
+        }
 }
 
 
