@@ -26,7 +26,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/List"
+                      $ref: "#/components/schemas/Lists"
                   args:
                     type: object
                     description: The query parameters used in the request
@@ -45,7 +45,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/List"
+                $ref: "#/components/schemas/Lists"
   /list/{id}:
     get:
       summary: Get a list by ID
@@ -175,6 +175,25 @@ components:
           description: The items of the list.
           items:
             $ref: "#/components/schemas/ListItem"
+      required:
+        - id
+        - name
+
+    Lists:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the list.
+        name:
+          type: string
+          description: The name of the list.
+        type:
+          type: integer
+          description: The type of the list.
+        headColor:
+          type: string
+          description: The head color of the list.
       required:
         - id
         - name
