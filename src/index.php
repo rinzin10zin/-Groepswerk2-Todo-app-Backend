@@ -1,7 +1,13 @@
 <?php
 
-require "./includes/Db.class.php";
-require "./includes/Lists.class.php";
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+var_dump("Hello WORLD!");
+
+require $_SERVER["DOCUMENT_ROOT"] . "todos/includes/Db.class.php";
+require $_SERVER["DOCUMENT_ROOT"] . "todos/includes/Lists.class.php";
 
 $db = new Db();
 $lists = new Lists($db);
