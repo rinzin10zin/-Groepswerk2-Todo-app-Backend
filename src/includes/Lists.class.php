@@ -24,6 +24,8 @@ class Lists
         LEFT JOIN category ON list.category_id = category.id
         LEFT JOIN type ON list.type_id = type.id;
         ";
+
+
         return $this->db->executeQuery($sql);
     }
     public function getListById($id)
@@ -34,7 +36,12 @@ class Lists
         LEFT JOIN type ON list.type_id = type.id
         WHERE list.id = :id;
         ";
-        return $this->db->executeOneQuery($sql, ["id" => $id]);
+        $listData = $this->db->executeQuery($sql, ["id" => $id]);
+        $sql = 'SELECT * FROM list_items WHERE list_id = :id';
+        $listData->listItems = $this->db->executeOneQuery($sql, ["id" => $id]);
+
+
+        return $listData;
     }
     public function addList($body)
     {
