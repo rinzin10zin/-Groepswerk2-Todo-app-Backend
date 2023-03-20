@@ -48,7 +48,8 @@ class Lists
         }, $keys);
         $values = implode(', ', $values);
         $sql = "INSERT INTO `list` ($cols) VALUES ($values);";
-        return $this->db->executeOneQuery($sql, $body);
+
+        return $this->db->executeInsertQuery($sql, $body);
     }
     public function getTodo($id)
     {
