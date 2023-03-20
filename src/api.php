@@ -17,28 +17,10 @@ $response = new StdClass;
 $response->args = $args; //Easy for developing, so you can see the query in the response
 $allowed_filters = ["resource", "id", "pma_lang", "pmaUser-1"];
 
-// echo "lol";
-// var_dump($_REQUEST);
-// var_dump(makeBody([], $allowed_filters));
-// var_dump(makeFilter(["name", "year", "word", "important", "color", "photo"]));
-// var_dump(makeFilter(["name", "type_id", "category_id", "important", "color", "photo"]));
-
-// echo "<pre>";
-// var_dump($_POST);
-// exit;
 
 //Open Database connection
 $db = new Db();
 $lists = new Lists($db);
-
-// echo "<pre>";
-// var_dump($lists->todoIsChecked(1));
-// exit;
-
-// $data = ["name" => "list2-test", "type_id" => "2", "category_id" => NULL, "important" => "0", "color" => "pink", "photo" => NULL];
-// $lists->addList($data);
-// echo "added";
-// exit;
 
 // localhost/api
 if (!isset($args["resource"])) {
@@ -63,8 +45,6 @@ switch ($args["resource"]) {
             case 'POST':
                 // makeBody(["name", "type_id", "category_id"], ["important", "color", "photo"]);
                 if (!isset($args["id"])) {
-                    // var_dump($_POST);
-                    // exit;
                     // needed data: $name, $type_id, $category_id, $important, $color, $photo
                     // $data = ["name" => "list1-test", "type_id" => "2", "category_id" => NULL, "important" => "0", "color" => "pink", "photo" => NULL];
                     $response->data = $lists->addList($_POST);
