@@ -101,4 +101,10 @@ class Lists
         $sql = "SELECT * FROM `list_item` WHERE `list_id` = :id";
         return $this->db->executeQuery($sql, ["id" => $id]);
     }
+    public function getAllCategoryNames()
+    {
+
+        $sql = "SELECT name, id From category";
+        return $this->db->executeQuery($sql);
+    }
 }
