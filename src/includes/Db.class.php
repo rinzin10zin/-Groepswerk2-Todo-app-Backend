@@ -4,7 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 
-require $_SERVER["DOCUMENT_ROOT"] . "/app/includes/options.env.php";
+require "./includes/options.env.php";
 
 class Db
 {
