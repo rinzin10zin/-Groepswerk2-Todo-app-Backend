@@ -7,8 +7,8 @@ error_reporting(E_ALL);
 
 var_dump("Hello WORLD!");
 
-require $_SERVER["DOCUMENT_ROOT"] . "/todos/includes/Db.class.php";
-require $_SERVER["DOCUMENT_ROOT"] . "/todos/includes/Lists.class.php";
+require $_SERVER["DOCUMENT_ROOT"] . "/app/includes/Db.class.php";
+require $_SERVER["DOCUMENT_ROOT"] . "/app/includes/Lists.class.php";
 
 $db = new Db();
 $lists = new Lists($db);
