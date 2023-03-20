@@ -1,0 +1,14 @@
+insert new category;
+INSERT INTO `category` (`id`, `name`) VALUES (NULL, 'Full Stack Development');
+
+insert new list
+INSERT INTO `list` (`id`, `name`, `createdAt`, `type_id`, `category_id`, `color`, `photo`) VALUES (NULL, 'Javascript', CURRENT_TIMESTAMP, '2', '1', 'black', NULL);
+
+insert new list item
+INSERT INTO `list-item` (`id`, `name`, `checked`, `list_id`) VALUES (NULL, 'Learn javascript online - Jad', '0', '1');
+
+update listname from id 2
+UPDATE `list` SET `name` = 'PHP', `color` = 'Yellow' WHERE `list`.`id` = 2;
+
+update list item
+UPDATE `list-item` SET `name` = 'Revise DOM' WHERE `list-item`.`id` = 3;

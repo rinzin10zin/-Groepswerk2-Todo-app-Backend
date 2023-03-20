@@ -31,10 +31,16 @@ class Db
         }
     }
 
-    public function executeGetQuery($sql, $fetch = PDO::FETCH_OBJ)
+    public function executeQuery($sql, $data = [], $fetch = PDO::FETCH_OBJ)
     {
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute($data);
         return $stmt->fetchAll($fetch);
+    }
+    public function executeOneQuery($sql, $data = [], $fetch = PDO::FETCH_OBJ)
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+        return $stmt->fetch($fetch);
     }
 }
