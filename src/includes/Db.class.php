@@ -58,4 +58,27 @@ class Db
             return false;
         }
     }
+    public function executeDeleteQuery($sql, $data = [])
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $result = $stmt->execute($data);
+        if ($result && $stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function executePatchQuery($sql, $data = [])
+    {
+
+
+        $stmt = $this->pdo->prepare($sql);
+        $result = $stmt->execute($data);
+
+        if ($result && $stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
