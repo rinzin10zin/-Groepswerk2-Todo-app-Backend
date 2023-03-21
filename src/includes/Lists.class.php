@@ -130,4 +130,20 @@ class Lists
         $sql = "SELECT name, id From category";
         return $this->db->executeQuery($sql);
     }
+    public function updateList($id, $data)
+    {
+        $sql = "UPDATE `list` SET ";
+        $params = array();
+
+        foreach ($data as $field => $value) {
+            $sql .= "`$field` = :$field, ";
+            $params[$field] = $value;
+        }
+
+        $sql = rtrim($sql, ", ");
+        $sql .= " WHERE `id` = :id";
+        $params["id"] = $id;
+
+        return $this->db->executeUpdateQuery($sql, $params);
+    }
 }
