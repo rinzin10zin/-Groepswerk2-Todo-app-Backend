@@ -81,4 +81,10 @@ class Db
             return false;
         }
     }
+    public function executeUpdateQuery($sql, $data = [])
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+        return $stmt->rowCount();
+    }
 }
