@@ -50,6 +50,12 @@ class Db
     {
         $stmt = $this->pdo->prepare($sql);
         $result = $stmt->execute($data);
-        return $result ? true : false;
+        if ($result) {
+            // Get the ID of the last inserted row
+            $last_insert_id = $this->pdo->lastInsertId();
+            return $last_insert_id;
+        } else {
+            return false;
+        }
     }
 }
