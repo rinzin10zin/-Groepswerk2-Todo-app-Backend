@@ -36,10 +36,23 @@ class Lists
         LEFT JOIN type ON list.type_id = type.id
         WHERE list.id = :id;
         ";
-        $listInfo = $this->db->executeOneQuery($sql, ["id" => $id]);
-        $sql = "SELECT * FROM list_item WHERE list_id = :id";
 
-        $listInfo->listItems = $this->db->executeQuery($sql, ["id" => $id]);
+        $listInfo = $this->db->executeOneQuery($sql, ["id" => $id]);
+        if (!$listInfo) {
+            return false;
+        }
+
+        // if (!$listInfo) {
+        //     $listInfo->error = "list with id ${id} not found";
+        //     $listInfo->status = "failed";
+        //     http_response_code(404);
+        //     return $listInfo;
+        // }
+
+        $sql = "SELECT * FROM list_item WHERE list_id = :id";
+        $data =  $this->db->executeQuery($sql, ["id" => $id]);
+
+        $listInfo->listItems = $data;
 
         return $listInfo;
     }
@@ -72,12 +85,13 @@ class Lists
     public function checkTodo($id)
     {
         $sql = "UPDATE `list_item` SET `checked` = '1' WHERE `list_item`.`id` = :id";
-        return $this->db->executeOneQuery($sql, ["id" => $id]);
+
+        return $this->db->executePatchQuery($sql, ["id" => $id]);
     }
     public function uncheckTodo($id)
     {
         $sql = "UPDATE `list_item` SET `checked` = '0' WHERE `list_item`.`id` = :id";
-        return $this->db->executeOneQuery($sql, ["id" => $id]);
+        return $this->db->executePatchQuery($sql, ["id" => $id]);
     }
     public function addTodo($body)
     {
@@ -91,17 +105,19 @@ class Lists
         }, $keys);
         $values = implode(', ', $values);
         $sql = "INSERT INTO `list_item` ($cols) VALUES ($values);";
-        return $this->db->executeOneQuery($sql, $body);
+        return $this->db->executeInsertQuery($sql, $body);
     }
     public function deleteList($id)
     {
         $sql = "DELETE FROM `list` WHERE `list`.`id` = :id";
-        return $this->db->executeOneQuery($sql, ["id" => $id]);
+        $response = $this->db->executeDeleteQuery($sql, ["id" => $id]);
+        return $response;
     }
     public function deleteTodo($id)
     {
         $sql = "DELETE FROM `list_item` WHERE `list_item`.`id` = :id";
-        return $this->db->executeOneQuery($sql, ["id" => $id]);
+        $response = $this->db->executeDeleteQuery($sql, ["id" => $id]);
+        return $response;
     }
     public function getAllTodoByList($id)
     {
@@ -113,5 +129,21 @@ class Lists
 
         $sql = "SELECT name, id From category";
         return $this->db->executeQuery($sql);
+    }
+    public function updateList($id, $data)
+    {
+        $sql = "UPDATE `list` SET ";
+        $params = array();
+
+        foreach ($data as $field => $value) {
+            $sql .= "`$field` = :$field, ";
+            $params[$field] = $value;
+        }
+
+        $sql = rtrim($sql, ", ");
+        $sql .= " WHERE `id` = :id";
+        $params["id"] = $id;
+
+        return $this->db->executeUpdateQuery($sql, $params);
     }
 }

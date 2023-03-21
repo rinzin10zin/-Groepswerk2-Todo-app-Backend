@@ -50,6 +50,41 @@ class Db
     {
         $stmt = $this->pdo->prepare($sql);
         $result = $stmt->execute($data);
-        return $result ? true : false;
+        if ($result) {
+            // Get the ID of the last inserted row
+            $last_insert_id = $this->pdo->lastInsertId();
+            return $last_insert_id;
+        } else {
+            return false;
+        }
+    }
+    public function executeDeleteQuery($sql, $data = [])
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $result = $stmt->execute($data);
+        if ($result && $stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function executePatchQuery($sql, $data = [])
+    {
+
+
+        $stmt = $this->pdo->prepare($sql);
+        $result = $stmt->execute($data);
+
+        if ($result && $stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function executeUpdateQuery($sql, $data = [])
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+        return $stmt->rowCount();
     }
 }
