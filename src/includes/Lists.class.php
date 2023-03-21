@@ -55,7 +55,8 @@ class Lists
         }, $keys);
         $values = implode(', ', $values);
         $sql = "INSERT INTO `list` ($cols) VALUES ($values);";
-        return $this->db->executeOneQuery($sql, $body);
+
+        return $this->db->executeInsertQuery($sql, $body);
     }
     public function getTodo($id)
     {
@@ -106,5 +107,11 @@ class Lists
     {
         $sql = "SELECT * FROM `list_item` WHERE `list_id` = :id";
         return $this->db->executeQuery($sql, ["id" => $id]);
+    }
+    public function getAllCategoryNames()
+    {
+
+        $sql = "SELECT name, id From category";
+        return $this->db->executeQuery($sql);
     }
 }

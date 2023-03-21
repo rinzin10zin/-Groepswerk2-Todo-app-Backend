@@ -46,4 +46,10 @@ class Db
         $stmt->execute($data);
         return $stmt->fetch($fetch);
     }
+    public function executeInsertQuery($sql, $data = [])
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $result = $stmt->execute($data);
+        return $result ? true : false;
+    }
 }
