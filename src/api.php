@@ -3,7 +3,6 @@ require "./includes/Db.class.php";
 require "./includes/Lists.class.php";
 require "./includes/functions.php";
 
-// $args['qsparts'] = explode('/', $args['qs']);
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
@@ -11,11 +10,9 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 
 
 $args = $_REQUEST; //Gets the Query from the url
-// var_dump("Hello world"); //If you check this for http://localhost/api/lists/2, you get array{resource=>lists, id=>2}
 $method = $_SERVER["REQUEST_METHOD"]; //Gets the method from the requests; eg. GET, POST, DELETE
 $response = new StdClass;
-$response->args = $args; //Easy for developing, so you can see the query in the response
-$allowed_filters = ["resource", "id", "pma_lang", "pmaUser-1"];
+// $response->args = $args; //Easy for developing, so you can see the query in the response
 
 
 //Open Database connection
@@ -43,7 +40,6 @@ switch ($args["resource"]) {
     case 'list':
         switch ($method) {
             case 'POST':
-                // makeBody(["name", "type_id", "category_id"], ["important", "color", "photo"]);
                 if (!isset($args["id"])) {
                     // needed data: $name, $type_id, $category_id, $important, $color, $photo
                     // $data = ["name" => "CNTest", "type_id" => "2", "category_id" => NULL, "important" => "0", "color" => "pink", "photo" => NULL];
