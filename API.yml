@@ -1,0 +1,227 @@
+openapi: 3.0.0
+info:
+  version: 1.0.1
+  title: Todo api
+  description: API made by Tenzin & Niels
+  contact:
+    email: your.email@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: https://s6.syntradeveloper.be/app/api
+    description: Local server
+paths:
+  /categories:
+    get:
+      summary: Get all the categories
+      responses:
+        "200":
+          description: Shows all the category names and id's
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Categories"
+                  args:
+                    type: object
+                    description: The query parameters used in the request
+
+  /lists:
+    get:
+      summary: Get all lists
+      responses:
+        "200":
+          description: A list of all lists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Lists"
+                  args:
+                    type: object
+                    description: The query parameters used in the request
+    post:
+      summary: Add a new list
+      requestBody:
+        description: The list to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListRequestBody"
+      responses:
+        "200":
+          description: The newly created list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lists"
+  /list/{id}:
+    get:
+      summary: Get a list by ID
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the list to retrieve
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        "200":
+          description: The list with the specified ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/List"
+    delete:
+      summary: Delete a list by ID
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the list to delete
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        "200":
+          description: Success message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+  /todos/{id}:
+    get:
+      summary: Get all todos from a list
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the list to retrieve todos for
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        "200":
+          description: A list of all todos for the specified list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Todo"
+                  args:
+                    type: object
+                    description: The query parameters used in the request
+    post:
+      summary: Add a new todo to a list
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the list to add the todo to
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      requestBody:
+        description: The todo to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TodoRequestBody"
+      responses:
+        "200":
+          description: The newly created todo
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Todo"
+
+components:
+  schemas:
+    ListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the list item.
+        name:
+          type: string
+          description: The name of the list item.
+        completed:
+          type: boolean
+          description: The completion status of the list item.
+      required:
+        - id
+        - name
+
+    List:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the list.
+        name:
+          type: string
+          description: The name of the list.
+        type:
+          type: integer
+          description: The type of the list.
+        headColor:
+          type: string
+          description: The head color of the list.
+        listItems:
+          type: array
+          description: The items of the list.
+          items:
+            $ref: "#/components/schemas/ListItem"
+      required:
+        - id
+        - name
+
+    Lists:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the list.
+        name:
+          type: string
+          description: The name of the list.
+        type:
+          type: integer
+          description: The type of the list.
+        headColor:
+          type: string
+          description: The head color of the list.
+      required:
+        - id
+        - name
+    Categories:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the category.
+        name:
+          type: string
+          description: The name of the category.
