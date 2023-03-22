@@ -127,78 +127,47 @@ if (!isset($args["resource"])) {
                     $response->message = $response->executed ? "successfully updated list" : "something went wrong";
                     http_response_code(200);
                     break;
-
-
-
-
-                default:
-                    // GET: localhost/api/list/id
-                    if (is_numeric($args["id"])) {
-                        $response->data = $lists->getListById($args["id"]);
-                        $response->status = "success";
-                        header('Content-Type: application/json; charset=utf-8');
-                        print json_encode($response);
-                        exit;
-                    }
-                    break;
             }
             break;
-            case 'PATCH':
+        case 'PATCH':
 
-                //IMPORTANT FOR PATCH, DOESNT WORK WITH POSTMAN SO ADD ANOTHER FORMDATA RULE WITH METHOD = PATCH TO 
-                //GET IN THIS CASE
+            //IMPORTANT FOR PATCH, DOESNT WORK WITH POSTMAN SO ADD ANOTHER FORMDATA RULE WITH METHOD = PATCH TO 
+            //GET IN THIS CASE
 
-                // Check if the ID is set and is a number
-                if (!isset($args["id"]) || !is_numeric($args["id"])) {
+            // Check if the ID is set and is a number
+            if (!isset($args["id"]) || !is_numeric($args["id"])) {
+                $response->status = "failed";
+                $response->message = "Invalid ID provided";
+                break;
+            }
+
+            // Check if the required fields are set in the request body
+            $required_fields = array("name", "important", "color", "photo");
+            foreach ($required_fields as $field) {
+                if (!isset($_REQUEST[$field])) {
                     $response->status = "failed";
-                    $response->message = "Invalid ID provided";
-                    break;
+                    $response->message = "Missing required field: $field";
+                    http_response_code(400);
+
+                    break 2;
                 }
+            }
 
-                // Check if the required fields are set in the request body
-                $required_fields = array("name", "important", "color", "photo");
-                foreach ($required_fields as $field) {
-                    if (!isset($_REQUEST[$field])) {
-                        $response->status = "failed";
-                        $response->message = "Missing required field: $field";
-                        http_response_code(400);
+            // Update the list with the provided data
 
-                        break 2;
-                    }
-                }
+            $data = array(
+                "name" => $_REQUEST["name"],
+                "important" => $_REQUEST["important"],
+                "color" => $_REQUEST["color"],
+                "photo" => $_REQUEST["photo"]
+            );
 
-                // Update the list with the provided data
-
-                $data = array(
-                    "name" => $_REQUEST["name"],
-                    "important" => $_REQUEST["important"],
-                    "color" => $_REQUEST["color"],
-                    "photo" => $_REQUEST["photo"]
-                );
-
-                $response->executed = $lists->updateList($args["id"], $data);
-                $response->status = $response->executed ? "success" : "failed";
-                $response->success = $response->executed ? true : false;
-                $response->message = $response->executed ? "successfully updated list" : "something went wrong";
-                http_response_code(200);
-                break;
-
-
-
-
-            default:
-                // GET: localhost/api/list/id
-                if (is_numeric($args["id"])) {
-                    $response->data = $lists->getListById($args["id"]);
-                    $response->status = "success";
-                    header('Content-Type: application/json; charset=utf-8');
-                    print json_encode($response);
-                    exit;
-                }
-                break;
-        }
-        break;
-
+            $response->executed = $lists->updateList($args["id"], $data);
+            $response->status = $response->executed ? "success" : "failed";
+            $response->success = $response->executed ? true : false;
+            $response->message = $response->executed ? "successfully updated list" : "something went wrong";
+            http_response_code(200);
+            break;
 
 
         case 'check':
