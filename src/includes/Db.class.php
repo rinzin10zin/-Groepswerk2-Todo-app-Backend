@@ -47,4 +47,45 @@ class Db
         $stmt->execute($data);
         return $stmt->fetch($fetch);
     }
+    public function executeInsertQuery($sql, $data = [])
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $result = $stmt->execute($data);
+        if ($result) {
+            // Get the ID of the last inserted row
+            $last_insert_id = $this->pdo->lastInsertId();
+            return $last_insert_id;
+        } else {
+            return false;
+        }
+    }
+    public function executeDeleteQuery($sql, $data = [])
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $result = $stmt->execute($data);
+        if ($result && $stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function executePatchQuery($sql, $data = [])
+    {
+
+
+        $stmt = $this->pdo->prepare($sql);
+        $result = $stmt->execute($data);
+
+        if ($result && $stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function executeUpdateQuery($sql, $data = [])
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+        return $stmt->rowCount();
+    }
 }
