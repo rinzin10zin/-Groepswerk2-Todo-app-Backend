@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 1.0.1
+  version: 1.0.2
   title: Todo api
   description: API made by Tenzin & Niels
   contact:
@@ -14,10 +14,12 @@ servers:
 paths:
   /categories:
     get:
-      summary: Get all the categories
+      summary: Get all categories
+      tags:
+        - categories
       responses:
-        "200":
-          description: Shows all the category names and id's
+        200:
+          description: Success response
           content:
             application/json:
               schema:
@@ -25,18 +27,339 @@ paths:
                 properties:
                   data:
                     type: array
+                    description: An array of all categories, each represented as an object with an `id` and `name` property.
                     items:
-                      $ref: "#/components/schemas/Categories"
-                  args:
-                    type: object
-                    description: The query parameters used in the request
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The unique identifier of the category.
+                        name:
+                          type: string
+                          description: The name of the category.
+                      required:
+                        - id
+                        - name
+                required:
+                  - data
+        500:
+          description: Server error
+  /todo/{id}:
+    delete:
+      summary: Delete a todo item
+      tags:
+        - todo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: The unique identifier of the todo item to delete.
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Whether the delete operation was successful or not.
+                  message:
+                    type: string
+                    description: The message to display if the delete operation was successful.
+                  status:
+                    type: string
+                    description: The status of the response (success or failed).
+                required:
+                  - success
+                  - message
+                  - status
+        404:
+          description: Todo item not found
+        500:
+          description: Server error
+  /uncheck/{id}:
+    patch:
+      summary: Uncheck a todo item
+      tags:
+        - todo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: The unique identifier of the todo item to uncheck.
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Whether the uncheck operation was successful or not.
+                  message:
+                    type: string
+                    description: The message to display if the uncheck operation was successful.
+                  status:
+                    type: string
+                    description: The status of the response (success or failed).
+                required:
+                  - success
+                  - message
+                  - status
+        404:
+          description: Todo item not found or already unchecked
+        500:
+          description: Server error
+  /check/{id}:
+    patch:
+      summary: Check a todo item
+      tags:
+        - todo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: The unique identifier of the todo item to check.
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Whether the check operation was successful or not.
+                  message:
+                    type: string
+                    description: The message to display if the check operation was successful.
+                  status:
+                    type: string
+                    description: The status of the response (success or failed).
+                required:
+                  - success
+                  - message
+                  - status
+        404:
+          description: Todo item not found or already checked
+        500:
+          description: Server error
 
+  /list/{id}:
+    patch:
+      summary: Update a list by ID
+      tags:
+        - list
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: The unique identifier of the list to update.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                method:
+                  type: string
+                  description: you have to add PATCH here
+                name:
+                  type: string
+                  description: The name of the list.
+                important:
+                  type: integer
+                  description: The importance of the list.
+                color:
+                  type: string
+                  description: The color of the list.
+                photo:
+                  type: string
+                  format: binary
+                  description: An image file for the list.
+              required:
+                - method
+                - name
+                - important
+                - color
+                - photo
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  executed:
+                    type: boolean
+                    description: Whether the update operation was executed successfully or not.
+                  success:
+                    type: boolean
+                    description: Whether the update operation was successful or not.
+                  message:
+                    type: string
+                    description: The message to display if the update operation was successful.
+                  status:
+                    type: string
+                    description: The status of the response (success or failed).
+                required:
+                  - executed
+                  - success
+                  - message
+                  - status
+        400:
+          description: Bad request
+        404:
+          description: List not found
+        500:
+          description: Server error
+    get:
+      summary: Get a list by ID
+      tags:
+        - list
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: The unique identifier of the list to get.
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/List"
+                    description: The list with the given ID.
+                  status:
+                    type: string
+                    description: The status of the response (success or failed).
+                required:
+                  - data
+                  - status
+              example:
+                data:
+                  id: 1
+                  name: "Grocery List"
+                  important: 1
+                  color: "#FFA500"
+                  photo: "https://example.com/list.jpg"
+                status: "success"
+        404:
+          description: List not found
+        500:
+          description: Server error
+    delete:
+      summary: Delete a list
+      tags:
+        - list
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: The unique identifier of the list to delete.
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Whether the delete operation was successful or not.
+                  message:
+                    type: string
+                    description: The message to display if the delete operation was successful.
+                  status:
+                    type: string
+                    description: The status of the response (success or failed).
+                required:
+                  - success
+                  - message
+                  - status
+        404:
+          description: List not found
+        500:
+          description: Server error
+  /list:
+    post:
+      summary: Add a new list
+      tags:
+        - list
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the list.
+                type:
+                  type: integer
+                  description: The type of the list.
+                headColor:
+                  type: string
+                  description: The head color of the list.
+              required:
+                - name
+      responses:
+        201:
+          description: Created response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: The unique identifier of the new list.
+                  status:
+                    type: string
+                    description: The status of the response (success or failed).
+                  message:
+                    type: string
+                    description: The message to display if the request was successful.
+                required:
+                  - id
+                  - status
+                  - message
+        400:
+          description: Bad request
+        500:
+          description: Server error
   /lists:
     get:
       summary: Get all lists
+      tags:
+        - lists
       responses:
-        "200":
-          description: A list of all lists
+        200:
+          description: Success response
           content:
             application/json:
               schema:
@@ -45,57 +368,67 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Lists"
-                  args:
-                    type: object
-                    description: The query parameters used in the request
+                      $ref: "#/components/schemas/List"
+                    description: The array of lists.
+                  status:
+                    type: string
+                    description: The status of the response (success or failed).
+                required:
+                  - data
+                  - status
+              example:
+                data:
+                  - id: 3
+                    name: "list1"
+                    color: ""
+                    photo: null
+                    important: 0
+                    createdAt: "2023-03-21 16:31:52"
+                    category_name: "Chores"
+                    type_name: "lists"
+                  - id: 4
+                    name: "Hello Wereld"
+                    color: "rede"
+                    photo: "testing"
+                    important: 1
+                    createdAt: "2023-03-21 16:33:48"
+                    category_name: "Shopping"
+                    type_name: "lists"
+                status: "success"
+
+        500:
+          description: Server error
+  /todo:
     post:
-      summary: Add a new list
+      summary: Add a new todo item to a list
+      tags:
+        - todo
       requestBody:
-        description: The list to add
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
-              $ref: "#/components/schemas/ListRequestBody"
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the todo item.
+                checked:
+                  type: integer
+                  description: Whether the todo item is checked or not.
+                list_id:
+                  type: integer
+                  description: The identifier of the list to add the todo item to.
+              required:
+                - name
+                - list_id
+            example:
+              success: true
+              status: "success"
+              message: "todo with id 20 successfully posted"
       responses:
-        "200":
-          description: The newly created list
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Lists"
-  /list/{id}:
-    get:
-      summary: Get a list by ID
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the list to retrieve
-          required: true
-          schema:
-            type: integer
-            minimum: 1
-      responses:
-        "200":
-          description: The list with the specified ID
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/List"
-    delete:
-      summary: Delete a list by ID
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the list to delete
-          required: true
-          schema:
-            type: integer
-            minimum: 1
-      responses:
-        "200":
-          description: Success message
+        200:
+          description: Success response
           content:
             application/json:
               schema:
@@ -103,59 +436,20 @@ paths:
                 properties:
                   status:
                     type: string
+                    description: The status of the response (success or failed).
+                  success:
+                    type: boolean
+                    description: Whether the request was successful or not.
                   message:
                     type: string
-  /todos/{id}:
-    get:
-      summary: Get all todos from a list
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the list to retrieve todos for
-          required: true
-          schema:
-            type: integer
-            minimum: 1
-      responses:
-        "200":
-          description: A list of all todos for the specified list
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/Todo"
-                  args:
-                    type: object
-                    description: The query parameters used in the request
-    post:
-      summary: Add a new todo to a list
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the list to add the todo to
-          required: true
-          schema:
-            type: integer
-            minimum: 1
-      requestBody:
-        description: The todo to add
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TodoRequestBody"
-      responses:
-        "200":
-          description: The newly created todo
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Todo"
-
+                    description: The message to display if the request was successful.
+                required:
+                  - status
+                  - success
+        400:
+          description: Bad request
+        500:
+          description: Server error
 components:
   schemas:
     ListItem:
@@ -173,55 +467,91 @@ components:
       required:
         - id
         - name
+List:
+  type: object
+  properties:
+    id:
+      type: integer
+      description: The unique identifier of the list.
+    name:
+      type: string
+      description: The name of the list.
+    color:
+      type: string
+      description: The color of the list.
+    photo:
+      type: string
+      description: The URL of the photo for the list.
+    important:
+      type: integer
+      description: Whether the list is marked as important or not.
+    createdAt:
+      type: string
+      format: date-time
+      description: The date and time the list was created.
+    category_name:
+      type: string
+      description: The name of the category the list belongs to.
+    type_name:
+      type: string
+      description: The type of the list.
+    listItems:
+      type: array
+      description: The items of the list.
+      items:
+        $ref: "#/components/schemas/ListItem"
+  required:
+    - id
+    - name
 
-    List:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The unique identifier of the list.
-        name:
-          type: string
-          description: The name of the list.
-        type:
-          type: integer
-          description: The type of the list.
-        headColor:
-          type: string
-          description: The head color of the list.
-        listItems:
-          type: array
-          description: The items of the list.
-          items:
-            $ref: "#/components/schemas/ListItem"
-      required:
-        - id
-        - name
-
-    Lists:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The unique identifier of the list.
-        name:
-          type: string
-          description: The name of the list.
-        type:
-          type: integer
-          description: The type of the list.
-        headColor:
-          type: string
-          description: The head color of the list.
-      required:
-        - id
-        - name
-    Categories:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The unique identifier of the category.
-        name:
-          type: string
-          description: The name of the category.
+ListItem:
+  type: object
+  properties:
+    id:
+      type: integer
+      description: The unique identifier of the item.
+    name:
+      type: string
+      description: The name of the item.
+    checked:
+      type: integer
+      description: Whether the item is checked or not.
+    list_id:
+      type: integer
+      description: The identifier of the list the item belongs to.
+  required:
+    - id
+    - name
+    - checked
+    - list_id
+Lists:
+  type: object
+  properties:
+    id:
+      type: integer
+      description: The unique identifier of the list.
+    name:
+      type: string
+      description: The name of the list.
+    color:
+      type: string
+      description: The color of the list.
+    photo:
+      type: string
+      description: The URL of the photo for the list.
+    important:
+      type: integer
+      description: Whether the list is marked as important or not.
+    createdAt:
+      type: string
+      format: date-time
+      description: The date and time the list was created.
+    category_name:
+      type: string
+      description: The name of the category the list belongs to.
+    type_name:
+      type: string
+      description: The type of the list.
+  required:
+    - id
+    - name
