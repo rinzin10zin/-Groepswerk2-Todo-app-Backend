@@ -1,43 +1,32 @@
-# Yet Another Lightweight Docker LAMP stack
-A lightweight Docker LAMP stack ([Apache](http://www.apache.org/), [MySQL](https://www.mysql.com/) and [PHP](http://php.net/)) based (mostly) on [Alpine](https://www.alpinelinux.org/about/) images.
+Todo App Backend
+This is the backend code repository for a Todo App project created by Niels and Tenzin as part of a school project. The project is licensed under a free license, which means that you are free to use, modify, and distribute the code.
 
-### Why Alpine?
+Features
+The backend code provides the following features for the Todo App:
 
-Because Alpine images are lightweight, and that means faster (down)loading times so you can start working on your web application as quick as possible.
+RESTful API endpoints for creating, updating, and deleting tasks
+User authentication and authorization using JWT tokens
+Integration with a MySQL database for persistent storage of tasks and user data
+Requirements
+To run the backend code, you will need the following software installed:
 
-## Prerequisites
+PHP 7.0 or later
+MySQL server
+Installation
+Clone this repository to your local machine
+Create a new MySQL database and import the database.sql file to create the necessary tables
+Rename the env.example file to .env and update the database connection settings with your own credentials
+Run php -S localhost:8000 in the root directory of the project to start the PHP development server
+API Documentation
+The API endpoints provided by the backend code are documented in the Swagger UI available at https://bump.sh/thausale/doc/todoapp. The documentation includes information on the request and response formats for each endpoint, as well as the required authentication headers.
 
-Before you proceed, make sure that you have the following components installed and properly set up on your machine:
+Contributing
+If you find any issues or bugs, please open an issue in the GitHub repository. Pull requests are also welcome!
 
-- [Git](https://git-scm.com/)
-- [Docker](https://www.docker.com/get-started)
+License
+This project is licensed under the terms of the MIT License. Feel free to use, modify, and distribute the code for any purpose.
 
-## Installation
-
-1. [Clone](https://help.github.com/en/articles/cloning-a-repository) or download this repository on your local computer.
-2. Open a command prompt/[CLI](https://en.wikipedia.org/wiki/Command-line_interface) and run `docker-compose build` to download the images. This might take a while if your Internet connection isn't fast so you may want to go grab a cup of coffee.
-
-## Configuration and Usage
-
-Out of the box, you'll get:
-
-- Apache 4.2
-- PHP 7.3
-- MySQL 5.7
-- phpMyAdmin 4.7
-
-You'll find an `.env` file at the root directory that you can edit to change the configuration of your LAMP stack. If you change anything in there, please make sure to do a rebuild (`docker-compose build --no-cache`) to update your LAMP stack accordingly.
-
-Once you're satisfied with the configuration, place your web application files inside the `src` folder, open a command prompt/[CLI](https://en.wikipedia.org/wiki/Command-line_interface) and run `docker-compose up -d` to start your LAMP stack.
-
-To view your web application on a browser, load `http://localhost` (or run `docker-machine ip` to get the IP address of your LAMP stack and use that instead.)
-
-### Connecting to MySQL
-
-MySQL `root` user's default password is `supersecret`. There's also another user that gets created called `user` with a default password `123abc`.
-
-The hostname you'll need to use is `db` (or the IP address of your docker machine) and the port is `3306`.
-
-### Connecting to phpMyAdmin
-
-To access phpMyAdmin visit `http://localhost:8080` (or the IP address followed by `:8080`). Use either of the users mentioned above to log in.
+Authors
+Niels
+Tenzin
+Thank you for using our code!
