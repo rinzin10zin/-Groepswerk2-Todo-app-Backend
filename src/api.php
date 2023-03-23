@@ -242,6 +242,10 @@ if (!isset($args["resource"])) {
                             $response->error = "Name is required";
                             break 2;
                         };
+                        if (strlen($data["name"]) < 2) {
+                            $response->error = "Name should be at least 2 characters long";
+                            break 2;
+                        }
                         $response->id = $lists->addCat($_POST);
                         $id = $response->id;
                         $response->status = $id ?  "success" : "failed";
