@@ -116,11 +116,17 @@ if (!isset($args["resource"])) {
 
                     $data = array(
                         "name" => $_REQUEST["name"],
-                        "important" => $_REQUEST["important"],
                         "color" => $_REQUEST["color"],
                         "photo" => $_REQUEST["photo"]
                     );
 
+                    if (isset($_REQUEST["category_id"])) {
+                        $data["category_id"] = $_REQUEST["category_id"];
+                    }
+
+                    if (isset($_REQUEST["important"])) {
+                        $data["important"] = $_REQUEST["important"];
+                    }
                     $response->executed = $lists->updateList($args["id"], $data);
                     $response->status = $response->executed ? "success" : "failed";
                     $response->success = $response->executed ? true : false;
