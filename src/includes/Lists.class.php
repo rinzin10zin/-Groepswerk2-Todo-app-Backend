@@ -107,6 +107,20 @@ class Lists
         $sql = "INSERT INTO `list_item` ($cols) VALUES ($values);";
         return $this->db->executeInsertQuery($sql, $body);
     }
+    public function addCat($body)
+    {
+        // needed data:  category name
+        $keys = array_keys($body);
+        $cols = implode(', ', $keys);
+
+
+        $values = array_map(function ($key) {
+            return ':' . $key;
+        }, $keys);
+        $values = implode(', ', $values);
+        $sql = "INSERT INTO `category` ($cols) VALUES ($values);";
+        return $this->db->executeInsertQuery($sql, $body);
+    }
     public function deleteList($id)
     {
         $sql = "DELETE FROM `list` WHERE `list`.`id` = :id";

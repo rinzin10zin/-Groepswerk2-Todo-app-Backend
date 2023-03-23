@@ -227,8 +227,23 @@ if (!isset($args["resource"])) {
                     $response->data = $lists->getAllCategoryNames();
                     header('Content-Type: application/json; charset=utf-8');
                     print json_encode($response);
-                    exit;
+                    break;
+                case 'POST':
+                    if (!isset($args["id"])) {
+                        $data = $_POST;
+                        if (!isset($data["name"])) {
+                            $response->error = "Name is required";
+                            break 2;
+                        };
+                        $response->id = $lists->addCat($_POST);
+                        $id = $response->id;
+                        $response->status = $id ?  "success" : "failed";
+                        $response->message = $id ?  "category with id ${id} inserted" : "failed";
+                        http_response_code(201);
+                    }
+                    break;
             }
+            break;
 
 
         case "list/": {
