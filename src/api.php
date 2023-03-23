@@ -231,9 +231,10 @@ if (!isset($args["resource"])) {
             switch ($method) {
                 case "GET":
                     $response->data = $lists->getAllCategoryNames();
+                    $response->status = "success";
                     header('Content-Type: application/json; charset=utf-8');
                     print json_encode($response);
-                    break;
+                    exit;
                 case 'POST':
                     if (!isset($args["id"])) {
                         $data = $_POST;
